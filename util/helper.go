@@ -6,25 +6,29 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-const SecretKey = "secret"
+var SecretKey = []byte("secret") // Ganti "your-secret-key" dengan kunci rahasia yang aman
 
 func GenerateJwt(issuer string) (string, error) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    issuer,
 		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 	})
-	return claims.SignedString([]byte(SecretKey))
-
+	return claims.SignedString(SecretKey)
 }
 
-func Parsejwt(cookie string) (string, error) {
+func Parsejwt(cookie string) (*jwt.StandardClaims, error) {
 	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
-		return []byte(SecretKey), nil
+		return SecretKey, nil
 	})
-	if err != nil || !token.Valid {
-		return "", err
-	}
-	claims := token.Claims.(*jwt.StandardClaims)
-	return claims.Issuer, nil
 
+	if err != nil || !token.Valid {
+		return nil, err
+	}
+
+	claims, ok := token.Claims.(*jwt.StandardClaims)
+	if !ok {
+		return nil, jwt.ErrInvalidClaimsType // Sesuaikan dengan error handling yang sesuai
+	}
+
+	return claims, nil
 }
