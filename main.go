@@ -21,7 +21,7 @@ func main() {
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{":" + port}, // Sesuaikan dengan origin frontend Anda
+		AllowOrigins:     string{":" + port}, // Sesuaikan dengan origin frontend Anda
 		AllowMethods:     "GET,POST,PUT,DELETE",
 		AllowCredentials: true,
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
