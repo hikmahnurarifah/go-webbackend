@@ -19,13 +19,7 @@ func main() {
 	}
 	port := os.Getenv("PORT")
 	app := fiber.New()
-	app.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"}, // Update this to the specific origins you want to allow
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-	}))
+	app.Use(cors.New())
 	routes.Setup(app)
 	app.Listen(":" + port)
 
