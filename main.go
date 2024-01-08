@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -22,12 +21,11 @@ func main() {
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3001"}, // Sesuaikan dengan origin frontend Anda
+		AllowOrigins:     []string{":" + port}, // Sesuaikan dengan origin frontend Anda
 		AllowMethods:     "GET,POST,PUT,DELETE",
 		AllowCredentials: true,
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
 		ExposeHeaders:    "Authorization",
-		MaxAge:           12 * time.Hour,
 	}))
 
 	routes.Setup(app)
